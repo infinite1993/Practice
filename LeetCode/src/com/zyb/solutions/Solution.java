@@ -3,11 +3,134 @@ package com.zyb.solutions;
 import java.util.HashMap;
 
 public class Solution {
+
+	/**
+	 * 13. Roman to Integer
+	 */
+	public int romanToInt(String s) {
+		return 0;
+	}
+
+	/**
+	 * 12. Integer to Roman
+	 */
+	public String intToRoman(int num) {
+		String[] romans = { "I", "V", "X", "L", "C", "D", "M" };
+		int j;
+		int k = 1000;
+		StringBuffer sb = new StringBuffer();
+		for (int i = 3; i >= 0; i--) {
+			j = num / k;
+			num = num - j * k;
+			k /= 10;
+			if (j <= 3) {
+				for (; j > 0; j--) {
+					sb.append(romans[2 * i]);
+				}
+			} else if (j == 4) {
+				sb.append(romans[2 * i]);
+				sb.append(romans[2 * i + 1]);
+			} else if (j == 5) {
+				sb.append(romans[2 * i + 1]);
+			} else if (j < 9) {
+				sb.append(romans[2 * i + 1]);
+				for (; j > 5; j--) {
+					sb.append(romans[2 * i]);
+				}
+			} else {
+				sb.append(romans[2 * i]);
+				sb.append(romans[2 * i + 2]);
+			}
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * 11. Container With Most Water
+	 */
+	public int maxArea(int[] height) {
+		int max = 0;
+		int area = 0;
+		int i = 0;
+		int j = height.length - 1;
+		while (i != j) {
+			area = (height[i] < height[j] ? height[i] : height[j]) * (j - i);
+			max = area > max ? area : max;
+			if (height[i] < height[j]) {
+				i++;
+			} else {
+				j--;
+			}
+		}
+		return max;
+	}
+
 	/**
 	 * 10. Regular Expression Matching
 	 */
 	public boolean isMatch(String s, String p) {
-		return false;
+		return s.matches(p);
+	}
+
+	/**
+	 * 9. Palindrome Number
+	 */
+	public boolean isPalindrome(int x) {
+		if (x < 0 || (x > 0 && x % 10 == 0)) {
+			return false;
+		}
+		int y = 0;
+		while (x > y) {
+			if (x / 10 == y) {
+				return true;
+			}
+			y = 10 * y + x % 10;
+			x /= 10;
+		}
+		return x == y;
+	}
+
+	/**
+	 * 8. String to Integer (atoi)
+	 */
+	public int myAtoi(String str) {
+		if (str.length() == 0) {
+			return 0;
+		}
+		int result = 0;
+		int i = 0;
+		int k;
+		while (i < str.length() && str.charAt(i) == ' ') {
+			// remove ' '
+			i++;
+		}
+		if (str.charAt(i) == '-') {
+			// negative number
+			k = -1;
+			i++;
+		} else if (str.charAt(i) == '+') {
+			// nonnegative number
+			k = 1;
+			i++;
+		} else {
+			// nonnegative number
+			k = 1;
+		}
+		while (i < str.length() && str.charAt(i) >= '0' && str.charAt(i) <= '9') {
+			// next char is number
+			if ((result == Integer.MAX_VALUE / 10 && str.charAt(i) - '0' > Integer.MAX_VALUE % 10)
+					|| (result > Integer.MAX_VALUE / 10)) {
+				result = Integer.MAX_VALUE;
+				break;
+			} else if ((result == Integer.MIN_VALUE / 10 && '0' - str.charAt(i) < Integer.MIN_VALUE % 10)
+					|| (result < Integer.MIN_VALUE / 10)) {
+				result = Integer.MIN_VALUE;
+				break;
+			}
+			result = result * 10 + (str.charAt(i) - '0') * k;
+			i++;
+		}
+		return result;
 	}
 
 	/**
@@ -17,18 +140,22 @@ public class Solution {
 		if (x == 0) {
 			return x;
 		}
+		// remainder
 		int i = 0;
+		// dividend
 		int j = x;
 		int result = 0;
 		while (i == 0) {
+			// find first nonzero number
 			i = j % 10;
 			j /= 10;
 			result += i;
 		}
 		while (j != 0) {
-			if ((result == 214748364 && j > 7) || (result > 214748364)
-					|| (result == -214748364 && j < -8)
-					|| (result < -214748364)) {
+			if ((result == Integer.MAX_VALUE / 10 && j > Integer.MAX_VALUE % 10)
+					|| (result > Integer.MAX_VALUE / 10)
+					|| (result == Integer.MIN_VALUE / 10 && j < Integer.MIN_VALUE % 10)
+					|| (result < Integer.MIN_VALUE / 10)) {
 				return 0;
 			}
 			result = result * 10 + j % 10;
@@ -69,7 +196,6 @@ public class Solution {
 	/**
 	 * 5. Longest Palindromic Substring
 	 */
-
 	public String longestPalindrome(String s) {
 		if (s.length() == 0 || s.length() == 1) {
 			return s;
