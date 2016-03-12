@@ -3,12 +3,57 @@ package com.zyb.solutions;
 import java.util.HashMap;
 
 public class Solution {
+	/**
+	 * 14. Longest Common Prefix
+	 */
+	public String longestCommonPrefix(String[] strs) {
+		if (strs.length == 0) {
+			return "";
+		}
+		String prefix = strs[0];
+		for (int i = 1; i < strs.length; i++) {
+			if (prefix.length() == 0) {
+				break;
+			}
+			int j = 0;
+			int len = prefix.length() < strs[i].length() ? prefix.length()
+					: strs[i].length();
+			for (; j < len; j++) {
+				if (prefix.charAt(j) != strs[i].charAt(j)) {
+					break;
+				}
+			}
+			prefix = prefix.substring(0, j);
+		}
+		return prefix;
+	}
 
 	/**
 	 * 13. Roman to Integer
 	 */
 	public int romanToInt(String s) {
-		return 0;
+		if (s.length() == 0) {
+			return 0;
+		}
+		String romans = "IVXLCDM";
+		int result = 0;
+		int lastIndex = 0;
+		int index;
+		for (int i = s.length() - 1; i >= 0; i--) {
+			if (i == s.length() - 1) {
+				lastIndex = index = romans.indexOf(s.charAt(i));
+				result += Math.pow(10, (index + 1) / 2) / (1 + index % 2);
+			} else {
+				index = romans.indexOf(s.charAt(i));
+				if (index < lastIndex) {
+					result -= Math.pow(10, (index + 1) / 2) / (1 + index % 2);
+				} else {
+					lastIndex = index;
+					result += Math.pow(10, (index + 1) / 2) / (1 + index % 2);
+				}
+			}
+		}
+		return result;
 	}
 
 	/**
